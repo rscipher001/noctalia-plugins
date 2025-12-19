@@ -5,6 +5,16 @@ All notable changes to the Mini Docker plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2025-12-17
+
+### Added
+- **Expandable Details**: Click on any Container, Image, Volume, or Network to view detailed output
+- **Advanced Run Dialog**: Container name, Environment Variables support, and Network selection dropdown
+
+### Changed
+- **Refactor**: Major refactoring of delegate components to fix QML layout warnings and improve stability
+- **Run Dialog**: Improved UI layout and error handling
+
 ## [2.0.0] - 2025-12-16
 
 ### Added
