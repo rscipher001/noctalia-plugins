@@ -92,6 +92,7 @@ This allows the community to share and use plugins outside the official registry
 | Repository        | Link                                                                     |
 |-------------------|--------------------------------------------------------------------------|
 | ThatOneCalculator | [GitHub](https://github.com/ThatOneCalculator/personal-noctalia-plugins) |
+| bennypowers | [GitHub](https://github.com/bennypowers/noctalia-plugins) |
 
 ## Development
 
