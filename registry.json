@@ -318,8 +318,10 @@
       "repository": "https://github.com/cleboost/noctalia-translator",
       "minNoctaliaVersion": "1.0.0",
       "license": "MIT",
-      "tags": [],
-      "lastUpdated": "2026-01-13T19:03:02+01:00"
+      "tags": [
+        "Launcher"
+      ],
+      "lastUpdated": "2026-01-13T20:41:44+01:00"
     },
     {
       "id": "unicode-picker",
