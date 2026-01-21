@@ -1,0 +1,20 @@
+{
+  "widget": {
+    "tooltip": "Linksklik: kleur kiezen | Rechtsklik: geschiedenis"
+  },
+  "panel": {
+    "title": "Kleurgeschiedenis",
+    "colorCount": "{count} kleur opgeslagen",
+    "colorCount-plural": "{count} kleuren opgeslagen",
+    "clearAll": "Alle kleuren wissen"
+  },
+  "settings": {
+    "gridSize": "Rastergrootte",
+    "gridSizeDescription": "Rastergrootte voor de kleurgeschiedenis"
+  },
+  "colorPicker": {
+    "cancelled": "Kleur kiezen geannuleerd of mislukt",
+    "copied": "Gekopieerd: {color}",
+    "parseFailed": "Kleur parseren mislukt"
+  }
+}

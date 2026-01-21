@@ -1,0 +1,20 @@
+{
+  "widget": {
+    "tooltip": "Left-click: pick color | Right-click: history"
+  },
+  "panel": {
+    "title": "Color History",
+    "colorCount": "{count} color saved",
+    "colorCount-plural": "{count} colors saved",
+    "clearAll": "Clear all colors"
+  },
+  "settings": {
+    "gridSize": "Grid Size",
+    "gridSizeDescription": "Grid size for the color picker history"
+  },
+  "colorPicker": {
+    "cancelled": "Color pick cancelled or failed",
+    "copied": "Copied: {color}",
+    "parseFailed": "Failed to parse color"
+  }
+}

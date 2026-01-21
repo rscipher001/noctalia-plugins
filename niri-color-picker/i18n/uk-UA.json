@@ -1,0 +1,20 @@
+{
+  "widget": {
+    "tooltip": "Лівий клік: вибрати колір | Правий клік: історія"
+  },
+  "panel": {
+    "title": "Історія кольорів",
+    "colorCount": "{count} колір збережено",
+    "colorCount-plural": "{count} кольорів збережено",
+    "clearAll": "Очистити всі кольори"
+  },
+  "settings": {
+    "gridSize": "Розмір сітки",
+    "gridSizeDescription": "Розмір сітки для історії кольорів"
+  },
+  "colorPicker": {
+    "cancelled": "Вибір кольору скасовано або не вдалося",
+    "copied": "Скопійовано: {color}",
+    "parseFailed": "Не вдалося розібрати колір"
+  }
+}

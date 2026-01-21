@@ -1,0 +1,20 @@
+{
+  "widget": {
+    "tooltip": "Linksklick: Farbe auswählen | Rechtsklick: Verlauf"
+  },
+  "panel": {
+    "title": "Farbverlauf",
+    "colorCount": "{count} Farbe gespeichert",
+    "colorCount-plural": "{count} Farben gespeichert",
+    "clearAll": "Alle Farben löschen"
+  },
+  "settings": {
+    "gridSize": "Rastergröße",
+    "gridSizeDescription": "Rastergröße für den Farbverlauf"
+  },
+  "colorPicker": {
+    "cancelled": "Farbauswahl abgebrochen oder fehlgeschlagen",
+    "copied": "Kopiert: {color}",
+    "parseFailed": "Farbe konnte nicht analysiert werden"
+  }
+}

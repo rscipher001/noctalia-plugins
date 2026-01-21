@@ -1,0 +1,20 @@
+{
+  "widget": {
+    "tooltip": "Clique esquerdo: escolher cor | Clique direito: histórico"
+  },
+  "panel": {
+    "title": "Histórico de cores",
+    "colorCount": "{count} cor guardada",
+    "colorCount-plural": "{count} cores guardadas",
+    "clearAll": "Limpar todas as cores"
+  },
+  "settings": {
+    "gridSize": "Tamanho da grelha",
+    "gridSizeDescription": "Tamanho da grelha para o histórico de cores"
+  },
+  "colorPicker": {
+    "cancelled": "Seleção de cor cancelada ou falhou",
+    "copied": "Copiado: {color}",
+    "parseFailed": "Falha ao analisar a cor"
+  }
+}

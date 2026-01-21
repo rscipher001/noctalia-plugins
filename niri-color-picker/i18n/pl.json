@@ -1,0 +1,20 @@
+{
+  "widget": {
+    "tooltip": "Lewy klik: wybierz kolor | Prawy klik: historia"
+  },
+  "panel": {
+    "title": "Historia kolorów",
+    "colorCount": "{count} kolor zapisany",
+    "colorCount-plural": "{count} kolorów zapisanych",
+    "clearAll": "Wyczyść wszystkie kolory"
+  },
+  "settings": {
+    "gridSize": "Rozmiar siatki",
+    "gridSizeDescription": "Rozmiar siatki dla historii kolorów"
+  },
+  "colorPicker": {
+    "cancelled": "Wybór koloru anulowany lub nieudany",
+    "copied": "Skopiowano: {color}",
+    "parseFailed": "Nie udało się przetworzyć koloru"
+  }
+}

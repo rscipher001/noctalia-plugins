@@ -1,0 +1,20 @@
+{
+  "widget": {
+    "tooltip": "Clic izquierdo: seleccionar color | Clic derecho: historial"
+  },
+  "panel": {
+    "title": "Historial de colores",
+    "colorCount": "{count} color guardado",
+    "colorCount-plural": "{count} colores guardados",
+    "clearAll": "Borrar todos los colores"
+  },
+  "settings": {
+    "gridSize": "Tamaño de cuadrícula",
+    "gridSizeDescription": "Tamaño de cuadrícula para el historial de colores"
+  },
+  "colorPicker": {
+    "cancelled": "Selección de color cancelada o fallida",
+    "copied": "Copiado: {color}",
+    "parseFailed": "Error al analizar el color"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "widget": {
+    "tooltip": "左鍵點擊：選擇顏色 | 右鍵點擊：歷史記錄"
+  },
+  "panel": {
+    "title": "顏色歷史",
+    "colorCount": "已儲存 {count} 個顏色",
+    "colorCount-plural": "已儲存 {count} 個顏色",
+    "clearAll": "清除所有顏色"
+  },
+  "settings": {
+    "gridSize": "網格大小",
+    "gridSizeDescription": "顏色歷史的網格大小"
+  },
+  "colorPicker": {
+    "cancelled": "顏色選擇已取消或失敗",
+    "copied": "已複製：{color}",
+    "parseFailed": "解析顏色失敗"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "widget": {
+    "tooltip": "کلیکی چەپ: رەنگ هەڵبژێرە | کلیکی ڕاست: مێژوو"
+  },
+  "panel": {
+    "title": "مێژووی رەنگەکان",
+    "colorCount": "{count} رەنگ پاشەکەوت کرا",
+    "colorCount-plural": "{count} رەنگ پاشەکەوت کران",
+    "clearAll": "سڕینەوەی هەموو رەنگەکان"
+  },
+  "settings": {
+    "gridSize": "قەبارەی تۆڕ",
+    "gridSizeDescription": "قەبارەی تۆڕ بۆ مێژووی رەنگەکان"
+  },
+  "colorPicker": {
+    "cancelled": "هەڵبژاردنی رەنگ هەڵوەشایەوە یان شکستی هێنا",
+    "copied": "کۆپی کرا: {color}",
+    "parseFailed": "شیکردنەوەی رەنگ شکستی هێنا"
+  }
+}

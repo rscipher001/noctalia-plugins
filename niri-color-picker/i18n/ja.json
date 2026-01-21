@@ -1,0 +1,20 @@
+{
+  "widget": {
+    "tooltip": "左クリック: 色を選択 | 右クリック: 履歴"
+  },
+  "panel": {
+    "title": "カラー履歴",
+    "colorCount": "{count}色保存済み",
+    "colorCount-plural": "{count}色保存済み",
+    "clearAll": "すべての色を消去"
+  },
+  "settings": {
+    "gridSize": "グリッドサイズ",
+    "gridSizeDescription": "カラー履歴のグリッドサイズ"
+  },
+  "colorPicker": {
+    "cancelled": "色選択がキャンセルまたは失敗しました",
+    "copied": "コピー済み: {color}",
+    "parseFailed": "色の解析に失敗しました"
+  }
+}

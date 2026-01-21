@@ -1,0 +1,20 @@
+{
+  "widget": {
+    "tooltip": "Bal kattintás: szín kiválasztása | Jobb kattintás: előzmények"
+  },
+  "panel": {
+    "title": "Színelőzmények",
+    "colorCount": "{count} szín mentve",
+    "colorCount-plural": "{count} szín mentve",
+    "clearAll": "Összes szín törlése"
+  },
+  "settings": {
+    "gridSize": "Rács mérete",
+    "gridSizeDescription": "Rács mérete a színelőzményekhez"
+  },
+  "colorPicker": {
+    "cancelled": "Színválasztás megszakítva vagy sikertelen",
+    "copied": "Másolva: {color}",
+    "parseFailed": "Szín elemzése sikertelen"
+  }
+}

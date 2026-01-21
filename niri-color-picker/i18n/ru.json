@@ -1,0 +1,20 @@
+{
+  "widget": {
+    "tooltip": "Левый клик: выбрать цвет | Правый клик: история"
+  },
+  "panel": {
+    "title": "История цветов",
+    "colorCount": "{count} цвет сохранён",
+    "colorCount-plural": "{count} цветов сохранено",
+    "clearAll": "Очистить все цвета"
+  },
+  "settings": {
+    "gridSize": "Размер сетки",
+    "gridSizeDescription": "Размер сетки для истории цветов"
+  },
+  "colorPicker": {
+    "cancelled": "Выбор цвета отменён или не удался",
+    "copied": "Скопировано: {color}",
+    "parseFailed": "Не удалось разобрать цвет"
+  }
+}

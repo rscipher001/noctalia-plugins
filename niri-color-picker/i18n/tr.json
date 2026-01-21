@@ -1,0 +1,20 @@
+{
+  "widget": {
+    "tooltip": "Sol tık: renk seç | Sağ tık: geçmiş"
+  },
+  "panel": {
+    "title": "Renk Geçmişi",
+    "colorCount": "{count} renk kaydedildi",
+    "colorCount-plural": "{count} renk kaydedildi",
+    "clearAll": "Tüm renkleri temizle"
+  },
+  "settings": {
+    "gridSize": "Izgara Boyutu",
+    "gridSizeDescription": "Renk geçmişi için ızgara boyutu"
+  },
+  "colorPicker": {
+    "cancelled": "Renk seçimi iptal edildi veya başarısız oldu",
+    "copied": "Kopyalandı: {color}",
+    "parseFailed": "Renk ayrıştırılamadı"
+  }
+}
