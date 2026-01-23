@@ -39,10 +39,19 @@ To display the exchange rate on the bar widget:
 
 AUD, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD, HUF, IDR, ILS, INR, ISK, JPY, KRW, MXN, MYR, NOK, NZD, PHP, PLN, RON, SEK, SGD, THB, TRY, USD, ZAR
 
-## TODO
+## IPC Commands
+
+Toggle currency converter panel:
+
+```bash
+qs -c noctalia-shell ipc call plugin:currency-exchange togglePanel
+```
+
+## TODO / IDEAS
 
 - Improve UX of settings page
 - Add i18n across the plugin
+- Make togglePanel ipc function optionally accept AMOUNT, FROM_CURR and TO_CURR
 
 ## Requirements
 
