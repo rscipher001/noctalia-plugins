@@ -17,9 +17,6 @@ Item {
   // Screen property (injected by PluginPanelSlot)
   property var screen: null
 
-  // SmartPanel geometry
-  readonly property var geometryPlaceholder: panelContainer
-
   // Grid configuration - fixed grid (400 colors)
   property int colorCellSize: 40 * Style.uiScaleRatio
 
@@ -53,116 +50,111 @@ Item {
     id: clipboardProcess
   }
 
-  Rectangle {
-    id: panelContainer
-    anchors.fill: parent
-    color: "transparent"
 
-    ColumnLayout {
-      anchors {
-        fill: parent
-        margins: Style.marginL
-      }
+  ColumnLayout {
+    anchors {
+      fill: parent
+      margins: Style.marginL
+    }
+    spacing: Style.marginM
+
+    // Header
+    RowLayout {
+      Layout.fillWidth: true
       spacing: Style.marginM
 
-      // Header
-      RowLayout {
+      NLabel {
         Layout.fillWidth: true
-        spacing: Style.marginM
+        label: pluginApi?.tr("panel.title")
+        description: pluginApi?.trp("panel.colorCount", colorHistory.length, "1 color saved", "{count} colors saved")
+      }
 
-        NLabel {
-          Layout.fillWidth: true
-          label: pluginApi?.tr("panel.title")
-          description: pluginApi?.trp("panel.colorCount", colorHistory.length, "1 color saved", "{count} colors saved")
-        }
+      // Clear history button
+      NIconButton {
+        icon: "trash"
+        baseSize: Style.baseWidgetSize
+        colorBg: Style.capsuleColor
+        colorFg: Color.mOnSurface
+        colorBorder: "transparent"
+        colorBorderHover: "transparent"
+        tooltipText: pluginApi?.tr("panel.clearAll")
 
-        // Clear history button
-        NIconButton {
-          icon: "trash"
-          baseSize: Style.baseWidgetSize
-          colorFg: Color.mError
-          colorFgHover: Color.mOnErrorContainer
-          colorBg: "transparent"
-          colorBgHover: Color.mErrorContainer
-          tooltipText: pluginApi?.tr("panel.clearAll")
-
-          onClicked: {
-            if (root.pluginApi) {
-              ColorPickerUtils.clearColorHistory(root.pluginApi)
-              Logger.i("Niri Color Picker", "Color history cleared from panel")
-            }
+        onClicked: {
+          if (root.pluginApi) {
+            ColorPickerUtils.clearColorHistory(root.pluginApi)
+            Logger.i("Niri Color Picker", "Color history cleared from panel")
           }
         }
       }
+    }
 
-      // Color grid
-      Grid {
-        id: colorGrid
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        columns: root.gridSize
-        spacing: root.cellSpacing
+    // Color grid
+    Grid {
+      id: colorGrid
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      columns: root.gridSize
+      spacing: root.cellSpacing
 
-        Repeater {
-          model: root.gridSize * root.gridSize
+      Repeater {
+        model: root.gridSize * root.gridSize
 
+        Rectangle {
+          id: colorCell
+          width: root.colorCellSize
+          height: root.colorCellSize
+          radius: Style.radiusS
+
+          property string cellColor: index < root.colorHistory.length ? root.colorHistory[index] : ""
+          property bool hasColor: cellColor !== ""
+
+          color: hasColor ? cellColor : Color.mSurfaceVariant
+          border.width: 1
+          border.color: hasColor ? Qt.darker(cellColor, 1.2) : Color.mOutline
+
+          // Hover effect
           Rectangle {
-            id: colorCell
-            width: root.colorCellSize
-            height: root.colorCellSize
-            radius: Style.radiusS
+            anchors.fill: parent
+            radius: parent.radius
+            color: "white"
+            opacity: cellMouseArea.containsMouse && colorCell.hasColor ? 0.2 : 0
+          }
 
-            property string cellColor: index < root.colorHistory.length ? root.colorHistory[index] : ""
-            property bool hasColor: cellColor !== ""
+          // Empty state icon
+          NIcon {
+            anchors.centerIn: parent
+            icon: "color-swatch"
+            color: Color.mOutline
+            pointSize: Style.fontSizeXS * Style.uiScaleRatio
+            visible: !colorCell.hasColor
+            opacity: 0.4
+          }
 
-            color: hasColor ? cellColor : Color.mSurfaceVariant
-            border.width: 1
-            border.color: hasColor ? Qt.darker(cellColor, 1.2) : Color.mOutline
+          MouseArea {
+            id: cellMouseArea
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: colorCell.hasColor ? Qt.PointingHandCursor : Qt.ArrowCursor
 
-            // Hover effect
-            Rectangle {
-              anchors.fill: parent
-              radius: parent.radius
-              color: "white"
-              opacity: cellMouseArea.containsMouse && colorCell.hasColor ? 0.2 : 0
-            }
+            onClicked: {
+              if (colorCell.hasColor) {
+                var selectedColor = colorCell.cellColor
 
-            // Empty state icon
-            NIcon {
-              anchors.centerIn: parent
-              icon: "color-swatch"
-              color: Color.mOutline
-              pointSize: Style.fontSizeXS * Style.uiScaleRatio
-              visible: !colorCell.hasColor
-              opacity: 0.4
-            }
+                // Copy color to clipboard
+                ColorPickerUtils.copyToClipboard(clipboardProcess, selectedColor)
+                Logger.i("Niri Color Picker", "Copied color from history:", selectedColor)
 
-            MouseArea {
-              id: cellMouseArea
-              anchors.fill: parent
-              hoverEnabled: true
-              cursorShape: colorCell.hasColor ? Qt.PointingHandCursor : Qt.ArrowCursor
+                // Move selected Niri Color Pickerto first position (unless already first)
+                if (root.pluginApi && index > 0) {
+                  var history = root.pluginApi.pluginSettings.colorHistory || []
+                  history = ColorPickerUtils.moveColorToFront(history, selectedColor)
+                  root.pluginApi.pluginSettings.colorHistory = history
+                  root.pluginApi.saveSettings()
+                }
 
-              onClicked: {
-                if (colorCell.hasColor) {
-                  var selectedColor = colorCell.cellColor
-
-                  // Copy color to clipboard
-                  ColorPickerUtils.copyToClipboard(clipboardProcess, selectedColor)
-                  Logger.i("Niri Color Picker", "Copied color from history:", selectedColor)
-
-                  // Move selected Niri Color Pickerto first position (unless already first)
-                  if (root.pluginApi && index > 0) {
-                    var history = root.pluginApi.pluginSettings.colorHistory || []
-                    history = ColorPickerUtils.moveColorToFront(history, selectedColor)
-                    root.pluginApi.pluginSettings.colorHistory = history
-                    root.pluginApi.saveSettings()
-                  }
-
-                  // Close the panel after selecting a color
-                  if (root.pluginApi) {
-                    root.pluginApi.closePanel(root.screen)
-                  }
+                // Close the panel after selecting a color
+                if (root.pluginApi) {
+                  root.pluginApi.closePanel(root.screen)
                 }
               }
             }
