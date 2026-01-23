@@ -389,7 +389,7 @@
     {
       "id": "translator",
       "name": "Translator",
-      "version": "1.1.1",
+      "version": "1.2.1",
       "author": "Cleboost",
       "description": "Quick translate in launcher",
       "repository": "https://github.com/cleboost/noctalia-translator",
@@ -398,7 +398,7 @@
       "tags": [
         "Launcher"
       ],
-      "lastUpdated": "2026-01-16T17:05:06+01:00"
+      "lastUpdated": "2026-01-23T04:46:59+11:00"
     },
     {
       "id": "unicode-picker",
