@@ -21,12 +21,6 @@ Rectangle {
   color: Style.capsuleColor
   radius: Style.radiusL
 
-  Connections {
-    target: Color
-    function onMOnHoverChanged() { }
-    function onMOnSurfaceChanged() { }
-  }
-
   NIcon {
     id: contentIcon
     anchors.centerIn: parent
@@ -51,10 +45,14 @@ Rectangle {
 
     onClicked: {
       if (pluginApi) {
-        // Set flag to trigger parser in Main.qml
-        pluginApi.pluginSettings.triggerToggle = Date.now();
-        pluginApi.saveSettings();
+        // Only open panel, don't trigger parsing
+        pluginApi.withCurrentScreen(screen => pluginApi.openPanel(screen));
       }
+    }
+
+    // Memory leak prevention: cleanup hover state
+    Component.onDestruction: {
+      hoverEnabled = false;
     }
   }
 }

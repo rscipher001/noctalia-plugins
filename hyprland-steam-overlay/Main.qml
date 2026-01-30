@@ -19,7 +19,6 @@ Item {
   readonly property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
 
   // User-configurable settings with fallback chain
-  readonly property bool enableChatNotifications: cfg.enableChatNotifications ?? defaults.enableChatNotifications ?? true
   readonly property int gapSize: cfg.gapSize ?? defaults.gapSize ?? 10
   readonly property real topMarginPercent: cfg.topMarginPercent ?? defaults.topMarginPercent ?? 2.5
   readonly property real windowHeightPercent: cfg.windowHeightPercent ?? defaults.windowHeightPercent ?? 95
@@ -38,30 +37,8 @@ Item {
   readonly property int totalWidth: friendsWidth + gapSize + mainWidth + gapSize + chatWidth
   readonly property int centerOffset: Math.round((screenWidth - totalWidth) / 2)
 
-  // Logger helper functions (fallback to console if Logger not available)
-  function logDebug(msg) {
-    if (typeof Logger !== 'undefined') Logger.d(msg);
-    else console.log(msg);
-  }
-
-  function logInfo(msg) {
-    if (typeof Logger !== 'undefined') Logger.i(msg);
-    else console.log(msg);
-  }
-
-  function logWarn(msg) {
-    if (typeof Logger !== 'undefined') Logger.w(msg);
-    else console.warn(msg);
-  }
-
-  function logError(msg) {
-    if (typeof Logger !== 'undefined') Logger.e(msg);
-    else console.error(msg);
-  }
-
   onPluginApiChanged: {
     if (pluginApi) {
-      logInfo("SteamOverlay: " + (pluginApi?.tr("main.plugin_loaded") || "Plugin loaded"));
       checkSteam.running = true;
     }
   }
@@ -335,46 +312,6 @@ Item {
     running: false
   }
 
-  // Timer to poll for Steam notification toasts (fast polling to catch brief toasts)
-  Timer {
-    id: chatNotificationTimer
-    interval: 500
-    repeat: true
-    running: enableChatNotifications && steamRunning && !overlayActive && !(pluginApi?.pluginSettings?.hasNewMessages)
-
-    onTriggered: {
-      checkNotificationToast.running = true;
-    }
-  }
-
-  // Process to detect Steam notification toast window
-  Process {
-    id: checkNotificationToast
-    command: ["bash", "-c", "hyprctl clients -j | jq -r '.[] | select(.class == \"steam\" and (.title | startswith(\"notificationtoasts\"))) | .title' | head -1"]
-    running: false
-
-    property string foundToast: ""
-
-    stdout: SplitParser {
-      onRead: data => {
-        var line = data.trim();
-        if (line.length > 0) {
-          checkNotificationToast.foundToast = line;
-        }
-      }
-    }
-
-    onExited: (exitCode, exitStatus) => {
-      if (exitCode === 0 && foundToast.length > 0) {
-        if (pluginApi && pluginApi.pluginSettings && !pluginApi.pluginSettings.hasNewMessages) {
-          pluginApi.pluginSettings.hasNewMessages = true;
-          pluginApi.saveSettings();
-        }
-      }
-      foundToast = "";
-    }
-  }
-
   // Detect ALL Steam windows (including additional ones)
   Process {
     id: detectAllWindows
@@ -449,11 +386,6 @@ Item {
     if (overlayActive) {
       hideWorkspace.running = true;
     } else {
-      // Clear new messages indicator when opening overlay
-      if (pluginApi && pluginApi.pluginSettings && pluginApi.pluginSettings.hasNewMessages) {
-        pluginApi.pluginSettings.hasNewMessages = false;
-        pluginApi.saveSettings();
-      }
 
       // Show overlay - detect main windows first, then all windows
       detectWindows.running = true;
@@ -463,8 +395,6 @@ Item {
         if (steamWindows.length > 0) {
           // Now detect and move ALL Steam windows
           detectAllWindows.running = true;
-        } else {
-          logWarn("SteamOverlay: " + (pluginApi?.tr("main.no_windows_found") || "No Steam windows found"));
         }
       });
     }

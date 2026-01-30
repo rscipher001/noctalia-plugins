@@ -1,10 +1,11 @@
-# Noctalia Plugins Registry
+# Noctalia Main Plugins Registry
 
-Official plugin registry for [Noctalia Shell](https://github.com/noctalia-dev/noctalia-shell).
+Main plugin registry for [Noctalia Shell](https://github.com/noctalia-dev/noctalia-shell).
 
 ## Overview
 
-This repository hosts community and official plugins for Noctalia Shell. The `registry.json` file is automatically maintained and provides a centralized index of all available plugins.
+This repository hosts community and official plugins for Noctalia Shell.  
+The `registry.json` file is automatically maintained and provides a centralized index of all available plugins.  
 
 ## Plugin Structure
 
@@ -17,7 +18,7 @@ plugin-name/
 ├── BarWidget.qml      # Bar widget component (optional)
 ├── Panel.qml          # Panel component (optional)
 ├── Settings.qml       # Settings UI (optional)
-├── preview.png        # Preview image used noctalia's website
+├── preview.png        # Preview image used noctalia's website, 16:9 @ 960x540 pixels
 └── README.md          # Plugin documentation
 ```
 
@@ -113,9 +114,9 @@ Check [registry.json](registry.json) or the [plugin overview](https://noctalia.d
 
 ## Custom Repositories
 
-In addition to the official plugin registry, Noctalia Shell supports loading plugins from custom repositories.
+In addition to this main plugin registry, Noctalia Shell supports loading plugins from custom repositories.
 
-This allows the community to share and use plugins outside the official registry.
+This allows the community to share and use plugins outside the main registry.
 
 | Repository        | Link                                                                     |
 |-------------------|--------------------------------------------------------------------------|

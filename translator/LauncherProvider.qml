@@ -9,6 +9,12 @@ Item {
     property var pluginApi: null
     property var launcher: null
     property string name: "Translator"
+    
+    // Preview support
+    property bool showPreview: pluginApi?.pluginSettings?.showPreview !== undefined ? pluginApi.pluginSettings.showPreview : true
+    readonly property bool hasPreview: showPreview
+    readonly property string previewComponentPath: Qt.resolvedUrl("TranslationPreview.qml")
+
     property var translationCache: ({})
     property var pendingTranslations: ({})
 
@@ -39,9 +45,11 @@ Item {
     }
 
     function getResults(searchText) {
-        if (!searchText.startsWith(">translate")) return [];
+        // Replace whitespace sequences with single spaces
+        var normalizedSearchText = searchText.replace(/\s+/g, " ").trim();
 
-        var parts = searchText.trim().split(" ");
+        if (!normalizedSearchText.startsWith(">translate")) return [];
+        var parts = normalizedSearchText.split(" ");
         if (parts.length <= 1) {
             return getDefaultLanguages().map(function(lang) {
                 return {
@@ -82,8 +90,28 @@ Item {
         }
 
         if (!pendingTranslations[cacheKey]) {
-            pendingTranslations[cacheKey] = true;
-            translateText(textToTranslate, targetLang, cacheKey);
+            var realTime = pluginApi?.pluginSettings?.realTimeTranslation !== undefined ? pluginApi.pluginSettings.realTimeTranslation : true;
+
+            if (realTime) {
+                pendingTranslations[cacheKey] = true;
+                translateText(textToTranslate, targetLang, cacheKey);
+            } else {
+                return [{
+                    "name": pluginApi?.tr("messages.pressEnter") || "Press Enter to translate",
+                    "description": textToTranslate,
+                    "icon": "language",
+                    "isTablerIcon": true,
+                    "onActivate": function() {
+                        pendingTranslations[cacheKey] = true;
+                        if (launcher) {
+                             if (typeof launcher.refreshResults === "function") launcher.refreshResults();
+                             else if (typeof launcher.updateResults === "function") launcher.updateResults();
+                             else if (typeof launcher.requestUpdate === "function") launcher.requestUpdate();
+                        }
+                        translateText(textToTranslate, targetLang, cacheKey);
+                    }
+                }];
+            }
         }
 
         return [{
@@ -108,44 +136,100 @@ Item {
 
     function translateText(text, targetLanguage, cacheKey) {
         var backend = getBackend();
-        var url = "";
         
+        var callback = function(result, error) {
+            delete pendingTranslations[cacheKey];
+            if (error) {
+                translationCache[cacheKey] = error;
+            } else {
+                translationCache[cacheKey] = result;
+            }
+            
+            if (launcher) {
+                if (typeof launcher.refreshResults === "function") launcher.refreshResults();
+                else if (typeof launcher.updateResults === "function") launcher.updateResults();
+                else if (typeof launcher.requestUpdate === "function") launcher.requestUpdate();
+            }
+        };
+
         if (backend === "google") {
-            url = "https://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=" + targetLanguage + "&dt=t&q=" + encodeURIComponent(text);
+            translateGoogle(text, targetLanguage, callback);
+        } else if (backend === "deepl") {
+            translateDeepL(text, targetLanguage, callback);
+        } else {
+            callback(null, pluginApi?.tr("messages.error") || "Unknown backend");
         }
-        
-        if (!url) {
-            translationCache[cacheKey] = pluginApi?.tr("messages.error") || "Translation error";
-            return;
-        }
-        
+    }
+
+    function translateGoogle(text, targetLanguage, callback) {
+        var url = "https://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=" + targetLanguage + "&dt=t&q=" + encodeURIComponent(text);
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE) {
-                delete pendingTranslations[cacheKey];
                 if (xhr.status === 200) {
                     try {
                         var response = JSON.parse(xhr.responseText);
-                        var translatedText = (response && response[0] && response[0][0] && response[0][0][0]) || "";
-                        if (translatedText) {
-                            translationCache[cacheKey] = translatedText;
-                            if (launcher) {
-                                if (typeof launcher.refreshResults === "function") launcher.refreshResults();
-                                else if (typeof launcher.updateResults === "function") launcher.updateResults();
-                                else if (typeof launcher.requestUpdate === "function") launcher.requestUpdate();
+                        var translatedText = "";
+                        if (response && response[0]) {
+                            for (var i = 0; i < response[0].length; i++) {
+                                if (response[0][i] && response[0][i][0]) {
+                                    translatedText += response[0][i][0];
+                                }
                             }
-                        } else {
-                            translationCache[cacheKey] = pluginApi?.tr("messages.error") || "Translation error";
                         }
-                    } catch (e) {
-                        translationCache[cacheKey] = pluginApi?.tr("messages.error") || "Translation error";
-                    }
+                        
+                        if (translatedText) {
+                            callback(translatedText, null);
+                        } else {
+                            callback(null, pluginApi?.tr("messages.error") || "Translation error");
+                        } 
+                    } catch (e) { callback(null, pluginApi?.tr("messages.error") || "Translation error"); }
                 } else {
-                    translationCache[cacheKey] = pluginApi?.tr("messages.connectionError") || "Connection error";
+                    callback(null, pluginApi?.tr("messages.connectionError") || "Connection error");
                 }
             }
         };
         xhr.send();
+    }
+
+    function translateDeepL(text, targetLanguage, callback) {
+        var apiKey = (pluginApi?.pluginSettings?.deeplApiKey || "").trim();
+        if (!apiKey) {
+            callback(null, pluginApi?.tr("messages.missingApiKey") || "Missing API Key");
+            return;
+        }
+        var host = apiKey.endsWith(":fx") ? "api-free.deepl.com" : "api.deepl.com";
+        var url = "https://" + host + "/v2/translate";
+        var postData = "text=" + encodeURIComponent(text) + "&target_lang=" + targetLanguage.toUpperCase();
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url);
+        xhr.setRequestHeader("Authorization", "DeepL-Auth-Key " + apiKey);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    try {
+                        var response = JSON.parse(xhr.responseText);
+                        var translatedText = (response && response.translations && response.translations[0] && response.translations[0].text) || "";
+                        if (translatedText) {
+                            callback(translatedText, null);
+                        }
+                        else {
+                            callback(null, pluginApi?.tr("messages.error") || "Translation error");
+                        }
+                    } catch (e) { 
+                        callback(null, pluginApi?.tr("messages.error") || "Translation error"); 
+                        }
+                } else if (xhr.status === 403) {
+                     callback(null, pluginApi?.tr("messages.invalidApiKey") || "Invalid API Key");
+                } else {
+                    callback(null, pluginApi?.tr("messages.connectionError") || "Connection error");
+                }
+            }
+        };
+        xhr.send(postData);
     }
 }

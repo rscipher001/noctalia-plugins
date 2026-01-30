@@ -1,11 +1,11 @@
 {
   "id": "translator",
   "name": "Translator",
-  "version": "1.1.1",
+  "version": "1.2.2",
   "minNoctaliaVersion": "1.0.0",
   "author": "Cleboost",
   "license": "MIT",
-  "repository": "https://github.com/cleboost/noctalia-translator",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "description": "Quick translate in launcher",
   "tags": [
     "Launcher"
@@ -20,7 +20,8 @@
   },
   "metadata": {
     "defaultSettings": {
-      "backend": "google"
+      "backend": "google",
+      "realTime": true
     }
   }
 }
